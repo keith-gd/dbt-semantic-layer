@@ -1,0 +1,76 @@
+# Cohort Analysis Saved Query Template
+# Analyze metric behavior by user cohort (e.g., signup month)
+
+saved_queries:
+  - name: [QUERY_NAME]_cohort
+    description: [DESCRIPTION] analyzed by cohort
+    query_params:
+      # Metrics to analyze by cohort
+      metrics:
+        - [METRIC_NAME]
+
+      # Group by cohort dimension + time period
+      group_by:
+        - [entity__cohort_dimension]  # e.g., customer__signup_month
+        - metric_time__[granularity]  # e.g., metric_time__month
+
+      # Optional: Filter to recent cohorts
+      where:
+        - "{{ TimeDimension('[entity__cohort_time_dimension]', '[granularity]') }} >= '[START_DATE]'"
+        # Optional: Add other filters
+        # - "{{ Dimension('entity__dimension') }} = 'value'"
+
+      # Optional: Order by cohort and time
+      # order_by:
+      #   - [entity__cohort_dimension]
+      #   - metric_time__[granularity]
+
+# Example: Revenue by Customer Signup Cohort
+# saved_queries:
+#   - name: revenue_by_signup_cohort
+#     description: Monthly revenue split by customer signup month
+#     query_params:
+#       metrics:
+#         - total_revenue
+#       group_by:
+#         - customer__signup_month
+#         - metric_time__month
+#       where:
+#         - "{{ TimeDimension('customer__signup_date', 'month') }} >= '2024-01-01'"
+#       order_by:
+#         - customer__signup_month
+#         - metric_time__month
+
+# Example: Retention by User Cohort
+# saved_queries:
+#   - name: retention_by_cohort
+#     description: Active users by signup cohort over time
+#     query_params:
+#       metrics:
+#         - active_users
+#       group_by:
+#         - user__signup_month
+#         - metric_time__month
+#       where:
+#         - "{{ TimeDimension('user__signup_date', 'month') }} >= '2023-01-01'"
+#       order_by:
+#         - user__signup_month
+#         - metric_time__month
+
+# Example: LTV by Acquisition Channel Cohort
+# saved_queries:
+#   - name: ltv_by_acquisition_channel
+#     description: Lifetime value by acquisition channel and signup month
+#     query_params:
+#       metrics:
+#         - customer_lifetime_value
+#       group_by:
+#         - customer__acquisition_channel
+#         - customer__signup_month
+#         - metric_time__month
+#       where:
+#         - "{{ TimeDimension('customer__signup_date', 'month') }} >= '2024-01-01'"
+#       order_by:
+#         - customer__acquisition_channel
+#         - customer__signup_month
+#         - metric_time__month

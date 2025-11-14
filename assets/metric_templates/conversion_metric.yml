@@ -1,0 +1,69 @@
+# Conversion Metric Template
+# Measures conversion between two events in a funnel
+
+metrics:
+  - name: [CONVERSION_METRIC_NAME]
+    description: [DESCRIPTION]
+    label: [DISPLAY_NAME]
+    type: conversion
+    type_params:
+      # Entity representing the conversion subject (user, session, etc.)
+      conversion_type_params:
+        entity: [ENTITY_NAME]
+
+        # Define base event (funnel start)
+        base_measure: [BASE_MEASURE_NAME]
+
+        # Define conversion event (funnel end)
+        conversion_measure: [CONVERSION_MEASURE_NAME]
+
+        # Optional: Time window for conversion
+        # window: [N days|hours]  # Default: unbounded
+
+      # Optional: Calculation method
+      # calculation: [conversion_rate|conversions]  # Default: conversion_rate
+
+    # Optional: Add filter
+    # filter: |
+    #   {{ Dimension('entity__dimension') }} = 'value'
+
+# Example: Sign-Up to Purchase Conversion Rate
+# metrics:
+#   - name: signup_to_purchase_rate
+#     description: Percentage of users who signed up and made a purchase within 30 days
+#     label: Sign-Up → Purchase Rate
+#     type: conversion
+#     type_params:
+#       conversion_type_params:
+#         entity: user
+#         base_measure: signup_count
+#         conversion_measure: purchase_count
+#         window: 30 days
+#       calculation: conversion_rate
+
+# Example: Impression to Click Conversion
+# metrics:
+#   - name: click_through_rate
+#     description: Percentage of impressions that resulted in clicks
+#     label: Click-Through Rate (CTR)
+#     type: conversion
+#     type_params:
+#       conversion_type_params:
+#         entity: session
+#         base_measure: impression_count
+#         conversion_measure: click_count
+#       calculation: conversion_rate
+
+# Example: Add-to-Cart to Checkout Conversion (7-Day Window)
+# metrics:
+#   - name: cart_to_checkout_rate
+#     description: Percentage of users who added to cart and checked out within 7 days
+#     label: Cart → Checkout Rate
+#     type: conversion
+#     type_params:
+#       conversion_type_params:
+#         entity: user
+#         base_measure: add_to_cart_count
+#         conversion_measure: checkout_count
+#         window: 7 days
+#       calculation: conversion_rate

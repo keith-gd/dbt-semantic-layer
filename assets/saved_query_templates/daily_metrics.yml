@@ -1,0 +1,63 @@
+# Daily Metrics Saved Query Template
+# Common pattern for daily aggregated metrics
+
+saved_queries:
+  - name: [QUERY_NAME]_daily
+    description: [DESCRIPTION] aggregated by day
+    query_params:
+      # Metrics to include
+      metrics:
+        - [METRIC_1]
+        - [METRIC_2]
+        # Add more metrics as needed
+
+      # Group by day (required for daily aggregation)
+      group_by:
+        - metric_time__day
+        # Optional: Add categorical dimensions
+        # - [entity__dimension_name]
+
+      # Optional: Filter to date range
+      where:
+        - "{{ TimeDimension('metric_time', 'day') }} >= '[START_DATE]'"
+        # Optional: Add dimension filters
+        # - "{{ Dimension('entity__dimension') }} = 'value'"
+
+      # Optional: Order by date descending
+      # order_by:
+      #   - -metric_time__day
+
+      # Optional: Limit results
+      # limit: 100
+
+# Example: Daily Revenue and Orders
+# saved_queries:
+#   - name: revenue_daily
+#     description: Daily revenue and order metrics
+#     query_params:
+#       metrics:
+#         - total_revenue
+#         - total_orders
+#         - average_order_value
+#       group_by:
+#         - metric_time__day
+#       where:
+#         - "{{ TimeDimension('metric_time', 'day') }} >= '2024-01-01'"
+#       order_by:
+#         - -metric_time__day
+
+# Example: Daily Active Users by Platform
+# saved_queries:
+#   - name: dau_by_platform_daily
+#     description: Daily active users split by platform
+#     query_params:
+#       metrics:
+#         - daily_active_users
+#       group_by:
+#         - metric_time__day
+#         - user__platform
+#       where:
+#         - "{{ TimeDimension('metric_time', 'day') }} >= '2024-01-01'"
+#       order_by:
+#         - -metric_time__day
+#         - user__platform

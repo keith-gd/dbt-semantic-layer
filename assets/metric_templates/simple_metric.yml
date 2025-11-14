@@ -1,0 +1,44 @@
+# Simple Metric Template
+# Copy this template and customize for your use case
+
+metrics:
+  - name: [METRIC_NAME]
+    description: [BUSINESS_DESCRIPTION]
+    label: [DISPLAY_NAME]
+    type: simple
+    type_params:
+      measure: [MEASURE_NAME]  # Must match measure defined in semantic model
+
+    # Optional: Add filter to narrow metric scope
+    # filter: |
+    #   {{ Dimension('entity__dimension_name') }} = 'value'
+
+    # Optional: Metadata for governance
+    # config:
+    #   meta:
+    #     owner: [TEAM_NAME]
+    #     owner_email: [EMAIL]
+    #     sla_tier: [1|2|3]
+    #     certification: [bronze|silver|gold]
+    #     business_logic: |
+    #       [PLAIN_ENGLISH_DESCRIPTION]
+    #     example_queries:
+    #       - "mf query --metrics [METRIC_NAME]"
+    #       - "mf query --metrics [METRIC_NAME] --group-by metric_time__month"
+
+# Example: Total Revenue
+# metrics:
+#   - name: total_revenue
+#     description: Sum of all completed order revenue
+#     label: Total Revenue
+#     type: simple
+#     type_params:
+#       measure: revenue
+#     filter: |
+#       {{ Dimension('order__order_status') }} = 'completed'
+#     config:
+#       meta:
+#         owner: finance-team
+#         owner_email: finance@company.com
+#         sla_tier: 1
+#         certification: gold

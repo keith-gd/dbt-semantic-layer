@@ -1,0 +1,68 @@
+# Weekly Metrics Saved Query Template
+# Common pattern for weekly aggregated metrics
+
+saved_queries:
+  - name: [QUERY_NAME]_weekly
+    description: [DESCRIPTION] aggregated by week
+    query_params:
+      # Metrics to include
+      metrics:
+        - [METRIC_1]
+        - [METRIC_2]
+        # Add more metrics as needed
+
+      # Group by week (required for weekly aggregation)
+      group_by:
+        - metric_time__week
+        # Optional: Add categorical dimensions
+        # - [entity__dimension_name]
+
+      # Optional: Filter to date range
+      where:
+        - "{{ TimeDimension('metric_time', 'day') }} >= '[START_DATE]'"
+        # Optional: Add dimension filters
+        # - "{{ Dimension('entity__dimension') }} = 'value'"
+
+      # Optional: Order by week descending
+      # order_by:
+      #   - -metric_time__week
+
+      # Optional: Limit results
+      # limit: 52  # Last year of weeks
+
+# Example: Weekly Revenue by Customer Segment
+# saved_queries:
+#   - name: revenue_weekly_by_segment
+#     description: Weekly revenue split by customer segment
+#     query_params:
+#       metrics:
+#         - total_revenue
+#         - total_orders
+#         - average_order_value
+#       group_by:
+#         - metric_time__week
+#         - customer__customer_segment
+#       where:
+#         - "{{ TimeDimension('metric_time', 'day') }} >= '2024-01-01'"
+#       order_by:
+#         - -metric_time__week
+#         - customer__customer_segment
+
+# Example: Weekly Marketing Funnel Metrics
+# saved_queries:
+#   - name: marketing_funnel_weekly
+#     description: Weekly marketing funnel KPIs
+#     query_params:
+#       metrics:
+#         - total_impressions
+#         - total_clicks
+#         - total_conversions
+#         - click_through_rate
+#         - conversion_rate
+#       group_by:
+#         - metric_time__week
+#       where:
+#         - "{{ TimeDimension('metric_time', 'day') }} >= '2024-01-01'"
+#       order_by:
+#         - -metric_time__week
+#       limit: 13  # Last quarter (13 weeks)

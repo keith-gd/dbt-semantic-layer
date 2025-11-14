@@ -1,0 +1,72 @@
+# Ratio Metric Template
+# Divides one metric by another (numerator / denominator)
+
+metrics:
+  # First, define the numerator metric (must be a metric, not a measure)
+  - name: [NUMERATOR_METRIC_NAME]
+    description: [NUMERATOR_DESCRIPTION]
+    type: simple
+    type_params:
+      measure: [NUMERATOR_MEASURE]
+
+  # Second, define the denominator metric
+  - name: [DENOMINATOR_METRIC_NAME]
+    description: [DENOMINATOR_DESCRIPTION]
+    type: simple
+    type_params:
+      measure: [DENOMINATOR_MEASURE]
+
+  # Finally, define the ratio metric
+  - name: [RATIO_METRIC_NAME]
+    description: [RATIO_DESCRIPTION]
+    label: [DISPLAY_NAME]
+    type: ratio
+    type_params:
+      numerator: [NUMERATOR_METRIC_NAME]  # Must reference METRIC, not MEASURE
+      denominator: [DENOMINATOR_METRIC_NAME]  # Must reference METRIC, not MEASURE
+
+    # Optional: Add filter (applied to both numerator and denominator)
+    # filter: |
+    #   {{ Dimension('entity__dimension') }} = 'value'
+
+# Example: Average Order Value (Revenue / Order Count)
+# metrics:
+#   - name: total_revenue
+#     description: Sum of order totals
+#     type: simple
+#     type_params:
+#       measure: revenue
+#
+#   - name: total_orders
+#     description: Count of orders
+#     type: simple
+#     type_params:
+#       measure: order_count
+#
+#   - name: average_order_value
+#     description: Revenue per order
+#     label: Average Order Value
+#     type: ratio
+#     type_params:
+#       numerator: total_revenue
+#       denominator: total_orders
+
+# Example: Conversion Rate (Conversions / Impressions)
+# metrics:
+#   - name: total_conversions
+#     type: simple
+#     type_params:
+#       measure: conversion_count
+#
+#   - name: total_impressions
+#     type: simple
+#     type_params:
+#       measure: impression_count
+#
+#   - name: conversion_rate
+#     description: Percentage of impressions that converted
+#     label: Conversion Rate
+#     type: ratio
+#     type_params:
+#       numerator: total_conversions
+#       denominator: total_impressions
