@@ -1,12 +1,24 @@
 ---
 name: dbt-semantic-layer-developer
-description: Expert-level assistance with dbt Semantic Layer, MetricFlow, semantic models, metrics, dimensions, entities, measures, and BI tool integrations. Extracted from official dbt documentation and optimized for data practitioners.
-version: 1.0.0
+description: Provides expert-level assistance with dbt Semantic Layer, MetricFlow, semantic models, metrics, dimensions, entities, measures, and BI tool integrations. Use this skill when building semantic models, creating metrics (simple, ratio, cumulative, derived, conversion), debugging validation errors, or integrating with BI tools. Extracted from official dbt documentation and optimized for data practitioners.
+version: 1.0.1
 ---
 
 # dbt Semantic Layer Developer Skill
 
-Comprehensive assistance with dbt Semantic Layer development, MetricFlow, and semantic modeling best practices. This skill provides deep knowledge extracted from official dbt documentation, including the full llms.txt content.
+## Your Role
+
+You are a dbt Semantic Layer architect specializing in MetricFlow, metric governance, and semantic modeling. Your expertise includes defining semantic models, creating metrics across all types, debugging validation errors, and integrating the Semantic Layer with BI tools and APIs.
+
+## Core Principles
+
+**Never speculate about code or schema you haven't read.** If you're uncertain about:
+- A semantic model's structure (entities, dimensions, measures)
+- Entity relationships or join logic
+- Metric definitions or their underlying measures
+- Time spine configuration
+
+**Stop and read the relevant YAML file first.** It's better to say "Let me check the semantic model definition" than to guess and provide incorrect guidance.
 
 ## When to Use This Skill
 
@@ -130,18 +142,19 @@ MetricFlow uses special syntax for filters:
 
 ### Common Semantic Model Pattern
 
+<example>
 ```yaml
 semantic_models:
   - name: orders
     description: Order fact table
     model: ref('fct_orders')
-    
+
     entities:
       - name: order_id
         type: primary
       - name: customer_id
         type: foreign
-    
+
     dimensions:
       - name: order_date
         type: time
@@ -149,7 +162,7 @@ semantic_models:
           time_granularity: day
       - name: order_status
         type: categorical
-    
+
     measures:
       - name: order_total
         agg: sum
@@ -157,9 +170,11 @@ semantic_models:
         agg: count
         expr: order_id
 ```
+</example>
 
 ### Common Metric Patterns
 
+<example>
 ```yaml
 metrics:
   # Simple metric
@@ -169,7 +184,7 @@ metrics:
     label: Total Revenue
     type_params:
       measure: order_total
-  
+
   # Ratio metric
   - name: average_order_value
     description: Revenue per order
@@ -178,7 +193,7 @@ metrics:
     type_params:
       numerator: total_revenue
       denominator: order_count
-  
+
   # Cumulative metric
   - name: cumulative_revenue
     description: Running total of revenue
@@ -187,9 +202,36 @@ metrics:
     type_params:
       measure: order_total
 ```
+</example>
+
+### ✅ Metric Verification Checklist
+
+**After creating any metric, verify the following before querying:**
+
+1. **Measure Existence** - Does the referenced measure exist in the semantic model?
+   - For simple/cumulative: Check `type_params.measure` exists in semantic model
+   - For ratio: Check both numerator and denominator measures/metrics exist
+
+2. **Filter Validity** - If using filters, do the referenced dimensions exist?
+   - Verify dimension names match semantic model definitions
+   - Check entity qualification (e.g., `order__status` not just `status`)
+
+3. **Time Spine Configuration** - For time-based metrics:
+   - Confirm time spine model exists and is configured in `dbt_project.yml`
+   - Verify `join_to_timespine: true` if needed for cumulative metrics
+
+4. **Metric Dependencies** - For ratio/derived metrics:
+   - Confirm all referenced metrics are defined
+   - Check for circular dependencies
+
+5. **Test Query** - Run a simple query to validate:
+   ```bash
+   mf query --metrics <your_metric> --limit 5
+   ```
 
 ### MetricFlow Time Spine Setup
 
+<example>
 ```sql
 -- models/metricflow_time_spine.sql
 {{ config(
@@ -211,9 +253,11 @@ final as (
 
 select * from final
 ```
+</example>
 
 ### Python SDK Query Example
 
+<example>
 ```python
 from dbtsl import SemanticLayerClient
 
@@ -232,6 +276,7 @@ with client.session():
     )
     print(table)
 ```
+</example>
 
 ## Reference Files
 
@@ -263,42 +308,26 @@ This skill includes comprehensive documentation organized by topic:
 - Examples for every command
 - Troubleshooting tips
 
-### 📊 **metrics.md** (6 pages, 109 KB)
-Detailed documentation on:
+### 📊 Additional References
+
+**[Metrics Reference](references/metrics.md)**
 - Defining metrics in YAML
 - Metric types and patterns
 - Python SDK usage examples
 - Query API reference
 
-### 🔧 **api_reference.md** (12 pages, 114 KB)
-API and integration documentation:
+**[API Reference](references/api_reference.md)**
 - dbt Semantic Layer API
 - Python SDK (sync and async)
 - GraphQL queries
 - JDBC connections
 - Lazy loading optimization
 
-### 📚 **examples.md** (5 pages, 155 KB)
-Real-world examples and tutorials:
-- Complete metric definitions
-- Semantic model patterns
-- Integration examples
-- Troubleshooting scenarios
-
-### 📖 **other.md** (181 pages, 1.4 MB)
-Additional dbt documentation:
-- Configuration and best practices
-- Jinja templating
-- Testing and validation
-- Project structure
-
-### 📄 **llms.md** (192 KB) and **llms-full.md** (7.9 MB)
-Complete dbt documentation in llms.txt format:
-- Full semantic layer documentation
-- MetricFlow comprehensive guide
-- All metric type specifications
-- Integration guides
-- Best practices from dbt Labs
+**[Additional Guides](references/)**
+- BI tool integrations
+- Enterprise patterns
+- Iterative migration strategies
+- Naming conventions
 
 ## Key Features
 
@@ -343,14 +372,35 @@ The Semantic Layer performs three types of validation:
 - **Time-based analysis** → MetricFlow time spine section
 
 ### For Debugging
+
+**When debugging validation errors, think step by step through the 3-layer validation architecture:**
+
+1. **PARSE Layer** - Is the YAML syntactically correct?
+   - Check indentation, quotes, special characters
+   - Run `dbt parse` to validate structure
+   - Look for: "Compilation Error", "YAML syntax error"
+
+2. **SEMANTIC Layer** - Is the logic valid?
+   - Check measure/dimension/entity references
+   - Verify join paths and entity relationships
+   - Run `mf validate-configs` to check semantic graph
+   - Look for: "Measure not found", "Unknown dimension", "No join path"
+
+3. **DATA PLATFORM Layer** - Can the query execute?
+   - Check SQL compilation and warehouse execution
+   - Verify table/column existence
+   - Run `mf query --compile` to see generated SQL
+   - Look for: "Column does not exist", "Table not found"
+
+**Debugging Resources:**
 1. **Local errors** → [Local Development Guide - Troubleshooting](references/guide_local_development.md)
 2. **Validation errors** → [Validation Workflow](references/guide_validation_workflow.md)
 3. **Query syntax errors** → [Query Syntax Guide - Troubleshooting](references/guide_query_syntax.md)
-4. **General issues** → llms-full.md for comprehensive troubleshooting
 
 ## Common Patterns
 
 ### Metric with Filter
+<example>
 ```yaml
 metrics:
   - name: completed_order_revenue
@@ -360,8 +410,10 @@ metrics:
     filter: |
       {{ Dimension('order_id__order_status') }} = 'completed'
 ```
+</example>
 
 ### Multi-Entity Join
+<example>
 ```yaml
 entities:
   - name: order_id
@@ -372,8 +424,10 @@ entities:
   - name: product_id
     type: foreign
 ```
+</example>
 
 ### Saved Query
+<example>
 ```yaml
 saved_queries:
   - name: monthly_revenue_by_region
@@ -386,6 +440,7 @@ saved_queries:
         - TimeDimension('order_date', 'month')
         - Dimension('customer__region')
 ```
+</example>
 
 ## Resources
 
@@ -398,6 +453,40 @@ saved_queries:
 - [dbt Semantic Layer Docs](https://docs.getdbt.com/docs/use-dbt-semantic-layer/dbt-sl)
 - [MetricFlow Documentation](https://docs.getdbt.com/docs/build/about-metricflow)
 - [Python SDK Repository](https://github.com/dbt-labs/semantic-layer-sdk-python)
+
+## Test Scenarios
+
+Use these scenarios to validate the skill's effectiveness:
+
+### Test 1: Create Simple Revenue Metric
+**Task:** Create a simple metric that sums order totals
+**Expected Behavior:**
+- Verify measure exists in semantic model before creating metric
+- Use verification checklist to validate configuration
+- Successfully query the metric with `mf query --metrics total_revenue --limit 5`
+
+### Test 2: Build Ratio Metric with Filter
+**Task:** Create average order value metric, filtered to completed orders only
+**Expected Behavior:**
+- Verify both numerator and denominator metrics/measures exist
+- Check filter dimension exists and uses proper entity qualification
+- Test query returns expected results
+
+### Test 3: Debug "Measure Not Found" Error
+**Task:** Encounter and resolve a validation error for missing measure
+**Expected Behavior:**
+- Apply 3-layer debugging (Parse → Semantic → Data Platform)
+- Identify error at Semantic layer
+- Read semantic model YAML to verify measure definition
+- Fix metric configuration and validate
+
+### Test 4: Configure Time Spine
+**Task:** Set up time spine for cumulative metrics
+**Expected Behavior:**
+- Create time spine model using dbt.date_spine macro
+- Configure in dbt_project.yml
+- Verify cumulative metric can join to time spine
+- Query cumulative metric grouped by time
 
 ## Updating This Skill
 

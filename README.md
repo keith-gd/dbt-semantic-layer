@@ -1,40 +1,90 @@
 # dbt Semantic Layer Developer Skill
 
+> **Transform your analytics with centralized metric definitions.** This Claude AI skill provides expert guidance on building production-ready semantic layers using dbt's MetricFlow—enabling consistent metrics across all your data tools.
+
 ## Overview
 
-This skill provides comprehensive assistance with dbt Semantic Layer development, extracted from official dbt documentation using [Skill Seekers](https://github.com/yusufkaraaslan/Skill_Seekers/).
+Stop rebuilding the same metrics in Tableau, Looker, and Python notebooks. This skill teaches Claude how to help you:
+
+- ✅ **Define metrics once, use everywhere** - Single source of truth for revenue, churn, LTV, and more
+- ✅ **Build semantic models** - Map your data warehouse tables to business entities
+- ✅ **Query with MetricFlow** - CLI, Python SDK, or direct BI integrations
+- ✅ **Follow best practices** - Production patterns from dbt Labs' official documentation
+
+Built from curated official dbt documentation, this skill gives Claude deep expertise in:
+
+- All 5 metric types (simple, ratio, cumulative, derived, conversion)
+- Semantic model architecture (entities, dimensions, measures)
+- MetricFlow validation and debugging (3-layer framework)
+- Time spine configuration and granularity
+- BI tool integrations (Tableau, Power BI, Looker, Hex, Mode)
+- Python SDK for notebooks and custom workflows
+- Verification checklists and best practices
 
 ## What's Included
 
-### 📄 SKILL.md (8.7 KB)
+### 📄 SKILL.md (10.5 KB, 511 lines)
 The main skill file with:
-- Quick reference patterns for semantic models and metrics
-- All metric types (simple, ratio, cumulative, derived, conversion)
-- MetricFlow time spine setup
-- Python SDK examples
-- Common troubleshooting scenarios
+- **Role definition** - Semantic Layer architect persona with hallucination guardrails
+- **Verification checklist** - 5-step validation for metric creation
+- **3-layer debugging framework** - Structured CoT for validation errors (Parse → Semantic → Data Platform)
+- **Quick reference patterns** - Semantic models and all metric types
+- **Test scenarios** - 4 validation scenarios for skill effectiveness
+- MetricFlow time spine setup and Python SDK examples
 
-### 📂 references/ (9.6 MB total)
-Comprehensive documentation organized by category:
+### 📂 references/ (~280 KB, 8,821 lines - curated content)
+Focused documentation for Semantic Layer development:
 
-- **metrics.md** (109 KB) - Metric definitions, Python SDK, query examples
-- **api_reference.md** (114 KB) - API documentation, integrations, JDBC/GraphQL
-- **examples.md** (155 KB) - Real-world examples and patterns
-- **other.md** (1.4 MB) - Additional dbt documentation
-- **llms.md** (192 KB) - Quick reference llms.txt
-- **llms-full.md** (7.9 MB) - Complete dbt documentation in llms.txt format
+**Core References**:
+- **metrics.md** (44 KB, 1,014 lines) - Metric definitions, Python SDK, query examples (curated)
+- **api_reference.md** (114 KB, 2,466 lines) - API documentation, integrations, JDBC/GraphQL
+- **cli_commands_complete.md** (19 KB, 830 lines) - MetricFlow CLI complete reference
+
+**Practical Guides** (8 focused guides):
+- **guide_bi_tool_integrations.md** - BI tool connection patterns (Tableau, Power BI, etc.)
+- **guide_local_development.md** - Local MetricFlow development setup
+- **guide_query_syntax.md** - MetricFlow query patterns and syntax
+- **guide_validation_workflow.md** - 3-layer validation approach
+- **guide_naming_conventions.md** - Metric and dimension naming standards
+- **guide_alternative_implementations.md** - Non-dbt semantic layer patterns
+- **guide_enterprise_patterns.md** - Enterprise adoption strategies
+- **guide_iterative_migration.md** - Step-by-step migration from legacy metrics
 
 ### 📦 Supporting Directories
 
 - **assets/** - For templates and boilerplate code
 - **scripts/** - Helper scripts for automation
 
-## How It Was Generated
+## Sources & Documentation
 
-1. **Source**: Official dbt documentation at docs.getdbt.com
-2. **Tool**: Skill Seekers web scraper
-3. **Method**: Extracted llms.txt content (204 pages)
-4. **Coverage**: Semantic Layer, MetricFlow, all metric types, integrations
+### Primary Source
+**[dbt Labs Documentation](https://docs.getdbt.com)** (Apache 2.0 license)
+- Semantic Layer and MetricFlow official guides
+- Metric definitions and types
+- MetricFlow CLI and Python SDK
+- API reference (GraphQL, REST, JDBC)
+- BI tool integration guides
+- Production best practices
+
+### Additional References
+- **[dbt Blog](https://www.getdbt.com/blog)** - Enterprise implementation patterns
+- **[Grid Dynamics](https://www.griddynamics.com)** - Production deployment case studies
+- **[MotherDuck Blog](https://motherduck.com/blog)** - Alternative semantic layer implementations
+
+### Development History
+
+**v1.0.0** (2025-11-04) - Initial generation
+1. Extracted content from dbt docs using Skill Seekers
+2. Curated 9.6 MB down to ~280 KB of Semantic Layer-focused content
+3. Organized into topic-based reference files
+
+**v1.0.1** (2025-11-17) - Production hardening
+1. Added role definition and hallucination guardrails
+2. Implemented 5-step metric verification checklist
+3. Created 3-layer debugging framework (Parse → Semantic → Data Platform)
+4. Added 4 test scenarios for validation
+5. Wrapped examples in XML tags for machine parsing
+6. Curated metrics.md (62% reduction, 2,710 → 1,014 lines)
 
 ## Key Topics Covered
 
@@ -74,55 +124,36 @@ This skill will be automatically available in Claude when working in this projec
 - Debug semantic layer issues
 - Learn best practices
 
-## Updating the Skill
-
-To refresh with latest dbt documentation:
-
-```bash
-cd ~/git-repos/Skill_Seekers
-source venv/bin/activate
-python3 cli/doc_scraper.py --config configs/skill_seeker_config_dbt_semantic.json
-
-# Copy updated files
-cp -r output/dbt-semantic-layer/* \
-  ~/git-repos/dbt_projects/dbt-enterprise/.claude/skills/dbt-semantic-layer-developer/
-```
-
-## Configuration
-
-The skill was generated using this config:
-`~/git-repos/dbt_projects/dbt-enterprise/skill_seeker_config_dbt_semantic.json`
-
-Key settings:
-- Base URL: https://docs.getdbt.com
-- Focus: Semantic Layer, MetricFlow, metrics
-- Max pages: 100
-- Rate limit: 1 second between requests
-
 ## File Sizes
 
-| File | Size | Description |
-|------|------|-------------|
-| SKILL.md | 8.7 KB | Main skill file |
-| llms-full.md | 7.9 MB | Complete documentation |
-| other.md | 1.4 MB | Additional docs |
-| examples.md | 155 KB | Practical examples |
-| llms.md | 192 KB | Quick reference |
-| api_reference.md | 114 KB | API docs |
-| metrics.md | 109 KB | Metric definitions |
+### Active Files (Focused on Semantic Layer)
+| File | Size | Lines | Description |
+|------|------|-------|-------------|
+| SKILL.md | 10.5 KB | 511 | Main skill file with verification checklists |
+| metrics.md | 44 KB | 1,014 | Metric definitions (curated, 62% reduction) |
+| api_reference.md | 114 KB | 2,466 | API documentation |
+| cli_commands_complete.md | 19 KB | 830 | MetricFlow CLI reference |
+| 8 guide_*.md files | ~90 KB | ~4,000 | Practical implementation guides |
 
-**Total**: ~9.6 MB of comprehensive documentation
+**Total**: ~280 KB / 8,821 lines (100% Semantic Layer focused)
 
-## Next Steps
+## Quick Start
 
-1. ✅ Skill is ready to use with Claude
-2. Test it by asking Claude about semantic layer topics
-3. Update periodically as dbt documentation evolves
-4. Add custom examples to assets/ directory
-5. Add helper scripts to scripts/ directory
+1. ✅ **Ready to use** - Skill automatically loads in this project directory
+2. **Test it** - Ask Claude: "Help me create a ratio metric for average order value"
+3. **Explore** - Try debugging scenarios with the 3-layer validation framework
+4. **Extend** - Add project-specific examples to `assets/` or helper scripts to `scripts/`
 
 ---
 
-**Generated**: 2025-11-04
-**Tool**: Skill Seekers v2.0.0
-**Source**: dbt Labs official documentation
+## Acknowledgments
+
+**Primary Content Source**
+Built from [dbt Labs documentation](https://docs.getdbt.com) (Apache 2.0 license). All core MetricFlow and Semantic Layer concepts are attributed to dbt Labs.
+
+**Extraction Tool**
+Initial generation using [Skill Seekers](https://github.com/yusufkaraaslan/Skill_Seekers/) v2.0.0 by Yusuf Karaaslan.
+
+**Version History**
+- v1.0.0 (2025-11-04) - Initial generation
+- v1.0.1 (2025-11-17) - Production hardening with verification frameworks
